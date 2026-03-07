@@ -85,65 +85,55 @@ const SavedUniversitiesPage = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {bookmarks.length === 0 ? (
-                    <div className="col-span-full py-24 text-center space-y-4">
-                        <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-300">
-                            <Plus size={32} />
-                        </div>
-                        <p className="text-slate-400">لا توجد جامعات محفوظة بعد. تصفح التوصيات في صفحة النتائج لحفظها!</p>
-                        <Button variant="ghost" className="text-indigo-600 font-bold" onClick={() => navigate('/dashboard/results')}>الانتقال إلى النتائج</Button>
-                    </div>
-                ) : (
-                    bookmarks.map((b) => (
-                        <Card key={b._id} className="p-8 space-y-6 flex flex-col h-full hover:shadow-xl transition-all border-slate-100 bg-white shadow-sm">
-                            <div className="flex justify-between items-start">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-[10px] font-bold text-slate-400 uppercase">مقارنة</span>
-                                    <input
-                                        type="checkbox"
-                                        className="w-5 h-5 rounded border-slate-200 text-indigo-600 focus:ring-indigo-500"
-                                        checked={comparing.includes(b._id)}
-                                        onChange={() => toggleCompare(b._id)}
-                                    />
-                                </div>
-                                <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600">
-                                    <Building2 size={24} />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2 flex-1 text-right">
-                                <h3 className="text-xl font-black text-slate-900">{b.universityName}</h3>
-                                <div className="flex items-center justify-end gap-2 text-sm text-slate-400">
-                                    {b.country} <MapPin size={14} />
-                                </div>
-                                <div className="flex justify-end pt-1">
-                                    <Badge variant="outline" className="border-slate-200 text-slate-500">{b.tuition}</Badge>
-                                </div>
-                            </div>
-
-                            <div className="space-y-3 pt-6 border-t border-slate-50 text-right">
-                                <div className="flex items-center justify-end gap-2 text-xs font-bold text-slate-400 uppercase">
-                                    ملاحظات شخصية <StickyNote size={14} />
-                                </div>
-                                <textarea
-                                    className="w-full h-24 p-4 text-sm bg-slate-50 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-indigo-100 transition-all resize-none italic text-slate-600 text-right"
-                                    placeholder="مثلاً: توفر زمالة بحثية رائعة..."
-                                    defaultValue={b.notes}
-                                    onBlur={(e) => handleUpdateNotes(b._id, e.target.value)}
+                {bookmarks.map((b) => (
+                    <Card key={b._id} className="p-8 space-y-6 flex flex-col h-full hover:shadow-xl transition-all border-slate-100 bg-white shadow-sm">
+                        <div className="flex justify-between items-start">
+                            <div className="flex items-center gap-2">
+                                <span className="text-[10px] font-bold text-slate-400 uppercase">مقارنة</span>
+                                <input
+                                    type="checkbox"
+                                    className="w-5 h-5 rounded border-slate-200 text-indigo-600 focus:ring-indigo-500"
+                                    checked={comparing.includes(b._id)}
+                                    onChange={() => toggleCompare(b._id)}
                                 />
                             </div>
-
-                            <div className="flex justify-between items-center bg-slate-50 p-4 rounded-xl -mx-4 -mb-4">
-                                <Button variant="ghost" size="sm" className="font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-2">
-                                    التفاصيل <ChevronRight size={16} />
-                                </Button>
-                                <button onClick={() => handleDelete(b._id)} className="text-slate-300 hover:text-red-500 transition-colors p-2">
-                                    <Trash2 size={18} />
-                                </button>
+                            <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600">
+                                <Building2 size={24} />
                             </div>
-                        </Card>
-                    ))
-                )}
+                        </div>
+
+                        <div className="space-y-2 flex-1 text-right">
+                            <h3 className="text-xl font-black text-slate-900">{b.universityName}</h3>
+                            <div className="flex items-center justify-end gap-2 text-sm text-slate-400">
+                                {b.country} <MapPin size={14} />
+                            </div>
+                            <div className="flex justify-end pt-1">
+                                <Badge variant="outline" className="border-slate-200 text-slate-500">{b.tuition}</Badge>
+                            </div>
+                        </div>
+
+                        <div className="space-y-3 pt-6 border-t border-slate-50 text-right">
+                            <div className="flex items-center justify-end gap-2 text-xs font-bold text-slate-400 uppercase">
+                                ملاحظات شخصية <StickyNote size={14} />
+                            </div>
+                            <textarea
+                                className="w-full h-24 p-4 text-sm bg-slate-50 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-indigo-100 transition-all resize-none italic text-slate-600 text-right"
+                                placeholder="مثلاً: توفر زمالة بحثية رائعة..."
+                                defaultValue={b.notes}
+                                onBlur={(e) => handleUpdateNotes(b._id, e.target.value)}
+                            />
+                        </div>
+
+                        <div className="flex justify-between items-center bg-slate-50 p-4 rounded-xl -mx-4 -mb-4">
+                            <Button variant="ghost" size="sm" className="font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-2">
+                                التفاصيل <ChevronRight size={16} />
+                            </Button>
+                            <button onClick={() => handleDelete(b._id)} className="text-slate-300 hover:text-red-500 transition-colors p-2">
+                                <Trash2 size={18} />
+                            </button>
+                        </div>
+                    </Card>
+                ))}
             </div>
 
             {/* Comparison Modal (Simple Overlay) */}

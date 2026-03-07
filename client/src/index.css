@@ -8,6 +8,23 @@
     html {
         scroll-behavior: smooth;
     }
+
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f8fafc;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #e2e8f0;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #cbd5e1;
+    }
 }
 
 :root {
@@ -18,7 +35,8 @@ body {
     margin: 0;
     min-width: 320px;
     overflow-x: hidden;
-    background-color: #ffffff;
+    background-color: #FDFDFF;
+    color: #1e293b;
 }
 
 .rtl {
@@ -29,10 +47,24 @@ body {
     direction: ltr;
 }
 
-.input-focus-purple:focus-within {
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
+.glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.text-gradient {
+    background: linear-gradient(to right, #4f46e5, #9333ea);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .font-cairo {
     font-family: 'Cairo', sans-serif;
+}
+
+.font-poppins {
+    font-family: 'Poppins', sans-serif;
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, GraduationCap, Twitter, Instagram, Linkedin, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Logo } from '../components/ui/Logo';
 import { Button } from '../components/ui/Button';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -20,37 +21,32 @@ export const MainLayout = () => {
     return (
         <div className={`flex flex-col min-h-screen bg-white text-slate-900 ${isRTL ? 'rtl' : 'ltr'}`}>
             {/* Header */}
-            <header className="fixed top-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-100">
-                <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
+            <header className="fixed top-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-50">
+                <div className="container mx-auto px-6 h-24 flex items-center justify-between">
+                    <div className="flex items-center gap-6">
                         {location.pathname !== '/' && (
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="text-slate-400 hover:text-indigo-600 p-2"
+                                className="text-slate-400 hover:text-indigo-600 p-2 rounded-xl transition-all"
                                 onClick={() => navigate(-1)}
                                 title={isRTL ? 'خطوة للخلف' : 'Go back'}
                             >
                                 {isRTL ? <ArrowRight size={22} /> : <ArrowLeft size={22} />}
                             </Button>
                         )}
-                        <Link to="/" className={`flex items-center gap-2 group ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
-                            <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-700 rounded-xl flex items-center justify-center text-white rotate-3 group-hover:rotate-0 transition-transform duration-300">
-                                <GraduationCap size={24} />
-                            </div>
-                            <span className="text-xl font-bold tracking-tight text-slate-900">
-                                {t('appTitle')}
-                            </span>
+                        <Link to="/" className="hover:scale-105 transition-transform duration-300">
+                            <Logo />
                         </Link>
                     </div>
 
                     {/* Desktop Nav */}
-                    <nav className="hidden md:flex items-center gap-8">
+                    <nav className="hidden lg:flex items-center gap-10">
                         {navLinks.map((link) => (
                             <a
                                 key={link.href}
                                 href={link.href}
-                                className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors"
+                                className="text-sm font-black text-slate-500 hover:text-indigo-600 transition-all uppercase tracking-widest"
                             >
                                 {link.name}
                             </a>
@@ -58,37 +54,37 @@ export const MainLayout = () => {
                     </nav>
 
                     {/* Desktop Actions */}
-                    <div className="hidden md:flex items-center gap-4">
+                    <div className="hidden md:flex items-center gap-6">
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="flex items-center gap-2 text-slate-500 hover:text-indigo-600"
+                            className="flex items-center gap-2 text-slate-500 hover:text-indigo-600 font-bold"
                             onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
                         >
-                            <span className="font-bold">{language === 'ar' ? 'English' : 'العربية'}</span>
+                            <span className="font-black text-xs uppercase tracking-tighter">{language === 'ar' ? 'English' : 'العربية'}</span>
                         </Button>
                         {user ? (
-                            <>
-                                <Link to="/dashboard" className="text-sm font-bold text-slate-700 hover:text-indigo-600 transition-colors">
+                            <div className="flex items-center gap-6">
+                                <Link to="/dashboard" className="text-sm font-black text-indigo-600 hover:text-indigo-700 transition-colors uppercase tracking-widest">
                                     {t('dashboard')}
                                 </Link>
-                                <Button variant="outline" className="text-sm px-6 py-2 border-slate-200 text-slate-600 hover:bg-slate-50" onClick={logout}>
+                                <Button variant="outline" className="text-xs px-6 py-2.5 border-slate-100 text-slate-500 hover:bg-slate-50 font-black rounded-xl" onClick={logout}>
                                     {t('logout')}
                                 </Button>
-                            </>
+                            </div>
                         ) : (
-                            <>
+                            <div className="flex items-center gap-4">
                                 <Link to="/signin">
-                                    <Button variant="ghost" className="text-sm px-6 py-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-50">
+                                    <Button variant="ghost" className="text-xs px-6 py-2.5 text-slate-500 hover:text-indigo-600 font-black rounded-xl">
                                         {t('signIn')}
                                     </Button>
                                 </Link>
                                 <Link to="/signup">
-                                    <Button variant="gold" className="text-sm px-6 py-2 bg-indigo-600 text-white hover:bg-indigo-700 border-none shadow-indigo-100">
+                                    <Button variant="gold" className="text-xs px-8 py-3 bg-indigo-600 text-white hover:bg-indigo-700 border-none shadow-xl shadow-indigo-600/20 font-black rounded-xl uppercase tracking-widest">
                                         {t('getStarted')}
                                     </Button>
                                 </Link>
-                            </>
+                            </div>
                         )}
                     </div>
 
@@ -155,13 +151,8 @@ export const MainLayout = () => {
                 <div className="container mx-auto px-6">
                     <div className={`grid grid-cols-1 md:grid-cols-4 gap-12 mb-16 ${isRTL ? 'text-right' : 'text-left'}`}>
                         <div className="col-span-1 md:col-span-1">
-                            <Link to="/" className={`flex items-center gap-2 mb-6 ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
-                                <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-700 rounded-lg flex items-center justify-center text-white">
-                                    <GraduationCap size={18} />
-                                </div>
-                                <span className="text-lg font-bold tracking-tight text-slate-900">
-                                    {t('appTitle')}
-                                </span>
+                            <Link to="/" className="mb-6">
+                                <Logo size="sm" />
                             </Link>
                             <p className={`text-slate-500 text-sm leading-relaxed max-w-xs ${isRTL ? 'text-right' : 'text-left'}`}>
                                 {t('footerDesc')}

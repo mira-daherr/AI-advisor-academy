@@ -12,7 +12,6 @@ import QuestionnairePage from './pages/QuestionnairePage';
 import ResultsPage from './pages/ResultsPage';
 import ChatPage from './pages/ChatPage';
 import DashboardHome from './pages/DashboardHome';
-import SavedUniversitiesPage from './pages/SavedUniversitiesPage';
 import SettingsPage from './pages/SettingsPage';
 import { Spinner } from './components/ui/Spinner';
 
@@ -57,7 +56,6 @@ function AppRoutes() {
                 }
             >
                 <Route index element={<DashboardHome />} />
-                <Route path="saved" element={<SavedUniversitiesPage />} />
                 <Route path="chat" element={<ChatPage />} />
                 <Route path="results" element={<ResultsPage />} />
                 <Route path="reports" element={<ResultsPage />} />

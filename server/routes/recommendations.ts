@@ -10,8 +10,14 @@ const router = Router();
 // @desc    Generate or retrieve cached academic recommendations
 router.post('/generate', protect, async (req: any, res: any) => {
     try {
-        // 1. Check if we already have a recent recommendation for this user
-        const existingRec = await Recommendation.findOne({ userId: req.user._id }).sort({ createdAt: -1 });
+        const { language = 'ar' } = req.body;
+        console.log(`[Recommendations] Generating for User: ${req.user._id}, Language: ${language}`);
+
+        // 1. Check if we already have a recent recommendation for this user with the same language
+        const existingRec = await Recommendation.findOne({
+            userId: req.user._id,
+            language: language
+        }).sort({ createdAt: -1 });
 
         // If it exists and is less than 24 hours old, return it (simple caching)
         if (existingRec) {
@@ -29,12 +35,13 @@ router.post('/generate', protect, async (req: any, res: any) => {
         }
 
         // 3. Call Gemini AI
-        const aiResponse = await generateAcademicRecommendations(studentData, req.user.plan);
+        const aiResponse = await generateAcademicRecommendations(studentData, req.user.plan, language);
 
         // 4. Save to MongoDB (Cache)
         const recommendation = await Recommendation.create({
             userId: req.user._id,
             ...aiResponse,
+            language,
             generatedAt: new Date()
         });
 

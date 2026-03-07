@@ -25,7 +25,7 @@ router.get('/history', protect, premiumOnly, async (req: any, res: Response) => 
 // @desc    Send message and get AI response
 router.post('/message', protect, premiumOnly, async (req: any, res: Response) => {
     try {
-        const { content } = req.body;
+        const { content, language = 'ar' } = req.body;
 
         // 1. Get or create chat
         let chat = await Chat.findOne({ userId: req.user._id });
@@ -45,7 +45,8 @@ router.post('/message', protect, premiumOnly, async (req: any, res: Response) =>
             content,
             chat.messages.slice(-5), // Send last 5 messages for context
             studentData,
-            recommendations
+            recommendations,
+            language
         );
 
         // 5. Add AI response to chat
