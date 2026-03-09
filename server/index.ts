@@ -5,7 +5,9 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
+import passport from './services/passportConfig';
 import authRoutes from './routes/auth';
+import googleAuthRoutes from './routes/googleAuth';
 import advisorRoutes from './routes/advisor';
 import paymentRoutes from './routes/payment';
 import questionnaireRoutes from './routes/questionnaire';
@@ -20,14 +22,18 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-    origin: 'http://localhost:5173', // Vite default port
+    origin: process.env.CLIENT_URL || 'http://localhost:5173',
     credentials: true
 }));
 app.use(express.json());
 app.use(cookieParser());
 
+// Initialize Passport (no session — we use JWT cookies)
+app.use(passport.initialize());
+
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/auth', googleAuthRoutes);        // GET /auth/google, GET /auth/google/callback
 app.use('/api/advisor', advisorRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/questionnaire', questionnaireRoutes);

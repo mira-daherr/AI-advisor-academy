@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
+import { sendWelcomeEmail } from '../services/emailService';
 
 const router = Router();
 
@@ -31,6 +32,11 @@ router.post('/register', async (req: Request, res: Response) => {
         });
 
         const token = generateToken(user._id.toString());
+
+        // Send welcome email (non-blocking)
+        sendWelcomeEmail(user.email, user.name).catch(err =>
+            console.error('Failed to send welcome email:', err)
+        );
 
         // Set cookie
         res.cookie('token', token, {

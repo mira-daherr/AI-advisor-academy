@@ -4,15 +4,17 @@ import bcrypt from 'bcryptjs';
 const userSchema = new Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-    password: { type: String, required: true },
+    // password is optional for Google OAuth users
+    password: { type: String },
+    googleId: { type: String, sparse: true, unique: true },
     plan: { type: String, enum: ['free', 'premium'], default: 'free' },
     profileCompleted: { type: Boolean, default: false },
     stripeCustomerId: { type: String },
 }, { timestamps: true });
 
-// Hash password before saving
+// Hash password before saving (only if password is set/modified)
 userSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) return next();
+    if (!this.isModified('password') || !this.password) return next();
     try {
         const salt = await bcrypt.genSalt(10);
         this.password = await bcrypt.hash(this.password, salt);
@@ -24,6 +26,7 @@ userSchema.pre('save', async function (next) {
 
 // Method to compare passwords
 userSchema.methods.comparePassword = async function (candidatePassword: string) {
+    if (!this.password) return false; // OAuth users have no password
     return bcrypt.compare(candidatePassword, this.password);
 };
 
