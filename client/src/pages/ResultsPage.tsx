@@ -10,7 +10,9 @@ import {
     TrendingUp,
     Heart,
     AlertCircle,
-    Download
+    Download,
+    ArrowRight,
+    ArrowLeft
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
@@ -108,8 +110,19 @@ const ResultsPage = () => {
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/5 rounded-full blur-[120px] -z-10" />
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600/5 rounded-full blur-[120px] -z-10" />
 
+            {/* Navigation Bar */}
+            <nav className="w-full px-6 py-6 md:px-12 flex items-center relative z-20 max-w-7xl mx-auto">
+                <button
+                    onClick={() => navigate('/questionnaire')}
+                    className="flex items-center gap-2 text-indigo-600 hover:text-indigo-800 transition-colors font-bold group bg-white/70 backdrop-blur-md px-5 py-2.5 rounded-2xl shadow-sm hover:shadow-md border border-indigo-100"
+                >
+                    {isRTL ? <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" /> : <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />}
+                    <span>{t('back')}</span>
+                </button>
+            </nav>
+
             {/* Header */}
-            <section className="pt-32 pb-20 px-6 md:px-12 relative">
+            <section className="pt-12 pb-20 px-6 md:px-12 relative">
                 <div className="max-w-6xl mx-auto text-center space-y-10">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}

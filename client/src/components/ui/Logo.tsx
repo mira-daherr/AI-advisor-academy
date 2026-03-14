@@ -1,5 +1,4 @@
 import React from 'react';
-import { GraduationCap, Sparkles, Brain } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 interface LogoProps {
@@ -22,18 +21,25 @@ export const Logo: React.FC<LogoProps> = ({ className = '', showText = true, siz
     return (
         <div className={`flex items-center gap-3 group transition-all duration-300 ${isRTL ? 'flex-row-reverse' : 'flex-row'} ${className}`}>
             <div className={`relative ${currentSize.box} flex items-center justify-center`}>
-                {/* Evolution of Logo: Brain + Hat + AI Sparkles */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600 to-violet-600 rounded-2xl shadow-lg shadow-indigo-200 rotate-6 group-hover:rotate-0 transition-transform duration-500" />
-                <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px] rounded-2xl border border-white/20" />
-
-                <div className="relative z-10 text-white">
-                    <GraduationCap size={currentSize.icon} className="absolute -top-1 -right-1 opacity-40" />
-                    <Brain size={currentSize.icon * 0.85} />
-                    <Sparkles
-                        size={currentSize.icon * 0.5}
-                        className="absolute -bottom-1 -left-1 text-gold animate-pulse"
-                    />
-                </div>
+                <svg className="w-full h-full drop-shadow-md transition-transform duration-500 cursor-pointer group-hover:scale-105" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-grad1" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stopColor="#7F77DD" />
+                            <stop offset="100%" stopColor="#534AB7" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="60" height="60" rx="14" fill="url(#logo-grad1)" />
+                    <circle cx="30" cy="26" r="16" fill="#7F77DD" opacity="0.4" />
+                    <polygon points="30,10 54,18 30,26 6,18" fill="white" opacity="0.95" />
+                    <rect x="23" y="18" width="14" height="12" rx="2" fill="white" opacity="0.8" />
+                    <rect x="16" y="30" width="28" height="4" rx="2" fill="white" opacity="0.65" />
+                    <line x1="53" y1="18" x2="53" y2="31" stroke="#EEEDFE" strokeWidth="2" strokeLinecap="round" />
+                    <circle cx="53" cy="34" r="3" fill="#EEEDFE" opacity="0.85" />
+                    <circle cx="18" cy="38" r="1.5" fill="white" opacity="0.4" />
+                    <circle cx="23" cy="41" r="1" fill="white" opacity="0.3" />
+                    <circle cx="37" cy="41" r="1" fill="white" opacity="0.3" />
+                    <circle cx="42" cy="38" r="1.5" fill="white" opacity="0.4" />
+                </svg>
             </div>
 
             {showText && (

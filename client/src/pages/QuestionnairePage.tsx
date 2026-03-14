@@ -158,26 +158,26 @@ const QuestionnairePage = () => {
                         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                         className="w-full"
                     >
-                        <Card className="p-10 md:p-16 bg-white border-none shadow-2xl shadow-indigo-900/5 rounded-[3rem]">
+                        <Card className="p-8 md:p-12 lg:p-16 bg-white border-none shadow-2xl shadow-indigo-900/5 rounded-[2.5rem] md:rounded-[3rem]">
                             <motion.h2
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                className="text-3xl md:text-5xl font-black text-slate-900 mb-12 leading-[1.1] tracking-tight text-center md:text-right"
+                                className={`text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-10 md:mb-12 leading-relaxed md:leading-snug tracking-tight ${isRTL ? 'text-right' : 'text-left md:text-center'}`}
                             >
                                 {t(currentQuestionKey)}
                             </motion.h2>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
                                 {getOptions().map((opt, idx) => (
                                     <button
                                         key={idx}
                                         onClick={() => handleAnswer(opt)}
-                                        className={`group relative overflow-hidden w-full p-8 rounded-[2rem] font-black text-xl transition-all duration-300 border-[3px] flex items-center gap-4 ${answers[qIndex + 1] === opt
-                                            ? 'bg-indigo-600 border-indigo-600 text-white shadow-2xl shadow-indigo-600/30 -translate-y-1'
-                                            : 'bg-white border-slate-50 text-slate-500 hover:border-indigo-100 hover:bg-slate-50 hover:text-indigo-600'
+                                        className={`group relative overflow-hidden w-full p-5 lg:p-7 rounded-3xl font-bold text-lg md:text-xl transition-all duration-300 border-2 flex items-center gap-4 ${answers[qIndex + 1] === opt
+                                            ? 'bg-indigo-600 border-indigo-600 text-white shadow-xl shadow-indigo-600/30 -translate-y-1'
+                                            : 'bg-white border-slate-100 text-slate-600 hover:border-indigo-200 hover:bg-indigo-50/50 hover:text-indigo-700 hover:-translate-y-0.5'
                                             } ${isRTL ? 'text-right flex-row-reverse' : 'text-left flex-row'}`}
                                     >
-                                        <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 font-black text-lg tracking-tighter ${answers[qIndex + 1] === opt ? 'bg-white/20' : 'bg-slate-100 group-hover:bg-indigo-100'
+                                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 font-black text-xl tracking-tighter transition-colors ${answers[qIndex + 1] === opt ? 'bg-white/20 text-white' : 'bg-slate-50 text-slate-400 group-hover:bg-indigo-100 group-hover:text-indigo-600'
                                             }`}>
                                             {String.fromCharCode(65 + idx)}
                                         </div>
