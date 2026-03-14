@@ -10,6 +10,8 @@ const userSchema = new Schema({
     plan: { type: String, enum: ['free', 'premium'], default: 'free' },
     profileCompleted: { type: Boolean, default: false },
     stripeCustomerId: { type: String },
+    isVerified: { type: Boolean, default: false },
+    verificationToken: { type: String },
 }, { timestamps: true });
 
 // Hash password before saving (only if password is set/modified)

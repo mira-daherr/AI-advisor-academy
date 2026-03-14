@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setLoading(true);
             setError(null);
             const res = await axios.post(`${API_URL}/auth/register`, data);
-            setUser(res.data);
+            return res.data;
         } catch (err: any) {
             setError(err.response?.data?.message || 'Registration failed');
             throw err;

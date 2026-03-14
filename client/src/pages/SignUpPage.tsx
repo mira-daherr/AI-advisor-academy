@@ -37,7 +37,11 @@ const SignUpPage = () => {
                 email: formData.email,
                 password: formData.password,
             });
-            navigate('/questionnaire');
+            navigate('/signin', {
+                state: {
+                    successMessage: isRTL ? 'تم التسجيل بنجاح! يرجى التحقق من بريدك الإلكتروني لتفعيل حسابك.' : 'Registration successful! Please check your email to verify your account.'
+                }
+            });
         } catch (err) {
             // Error handled by context
         }

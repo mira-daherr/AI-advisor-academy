@@ -59,6 +59,31 @@ export const sendWelcomeEmail = async (to: string, name: string): Promise<boolea
 };
 
 /**
+ * Sends an email verification link
+ */
+export const sendVerificationEmail = async (to: string, name: string, token: string): Promise<boolean> => {
+    const backendUrl = process.env.NODE_ENV === 'production'
+        ? 'https://ai-advisor-academy-production.up.railway.app'
+        : `http://localhost:${process.env.PORT || 5000}`;
+    const verifyLink = `${backendUrl}/api/auth/verify-email?token=${token}`;
+
+    const subject = 'تأكيد البريد الإلكتروني - المستشار الأكاديمي الذكي';
+    const text = `أهلاً ${name}،\n\nيرجى تأكيد بريدك الإلكتروني للوصول إلى حسابك بالنقر على الرابط التالي:\n${verifyLink}\n\nمع أطيب التحيات،\nفريق المستشار الأكاديمي الذكي`;
+    const html = `
+    <div dir="rtl" style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; text-align: right;">
+      <h2>تأكيد البريد الإلكتروني</h2>
+      <p>أهلاً ${name}،</p>
+      <p>شكراً لتسجيلك معنا! يرجى تأكيد بريدك الإلكتروني لتتمكن من الوصول إلى لوحة التحكم.</p>
+      <a href="${verifyLink}" style="display: inline-block; padding: 10px 20px; margin: 10px 0; background-color: #4f46e5; color: #fff; text-decoration: none; border-radius: 8px; font-weight: bold;">تأكيد البريد الإلكتروني</a>
+      <p>أو الصق هذا الرابط في متصفحك:</p>
+      <p><a href="${verifyLink}" dir="ltr" style="display: block; text-align: left;">${verifyLink}</a></p>
+    </div>
+  `;
+
+    return sendEmail(to, subject, text, html);
+};
+
+/**
  * Sends a password reset email
  */
 export const sendPasswordResetEmail = async (to: string, resetLink: string): Promise<boolean> => {

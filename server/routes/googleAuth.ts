@@ -5,7 +5,9 @@ import jwt from 'jsonwebtoken';
 const router = Router();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret';
-const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+const CLIENT_URL = process.env.NODE_ENV === 'production'
+    ? (process.env.FRONTEND_URL || 'https://astonishing-macaron-822c6b.netlify.app')
+    : (process.env.CLIENT_URL || 'http://localhost:5173');
 
 // Helper to generate JWT token
 const generateToken = (id: string) => {
@@ -37,7 +39,7 @@ router.get(
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-        sameSite: 'none', // 'lax' needed for cross-origin OAuth redirects
+            sameSite: 'none', // 'lax' needed for cross-origin OAuth redirects
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
 
