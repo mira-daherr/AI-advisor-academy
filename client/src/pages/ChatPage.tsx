@@ -20,7 +20,7 @@ import { Card } from '../components/ui/Card';
 import { Spinner } from '../components/ui/Spinner';
 import { useLanguage } from '../contexts/LanguageContext';
 
-const API_URL = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const SuggestedPrompt = ({ text, onClick }: { text: string; onClick: () => void }) => (
     <button
