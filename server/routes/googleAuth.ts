@@ -35,15 +35,7 @@ router.get(
 
         const token = generateToken(user._id.toString());
 
-        // Set the same httpOnly cookie as the regular login
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'none', // 'lax' needed for cross-origin OAuth redirects
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        });
-
-        res.redirect(`${CLIENT_URL}/dashboard`);
+        res.redirect(`${CLIENT_URL}/auth/callback?token=${token}`);
     }
 );
 

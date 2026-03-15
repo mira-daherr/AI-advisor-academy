@@ -63,19 +63,13 @@ router.post('/login', async (req: Request, res: Response) => {
 
             const token = generateToken(user._id.toString());
 
-            res.cookie('token', token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
-                maxAge: 7 * 24 * 60 * 60 * 1000,
-            });
-
             res.json({
                 _id: user._id,
                 name: user.name,
                 email: user.email,
                 plan: user.plan,
                 profileCompleted: user.profileCompleted,
+                token,
             });
         } else {
             res.status(401).json({ message: 'Invalid email or password' });
@@ -134,7 +128,12 @@ router.post('/logout', (req: Request, res: Response) => {
 // @route   GET /api/auth/me
 // @desc    Get current user
 router.get('/me', async (req: any, res: Response) => {
-    const token = req.cookies.token;
+    let token = req.cookies.token;
+
+    // Also check Authorization header
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        token = req.headers.authorization.split(' ')[1];
+    }
 
     if (!token) {
         return res.status(401).json({ message: 'Not authorized, no token' });

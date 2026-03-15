@@ -2,8 +2,12 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import axios from 'axios';
 
 // Configure axios for credentials
-axios.defaults.withCredentials = true;
+// Configure axios
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const token = localStorage.getItem('token');
+if (token) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
 
 interface User {
     _id: string;
@@ -33,12 +37,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const checkAuth = async () => {
         try {
             setLoading(true);
-            const res = await axios.get(`${API_URL}/auth/me`);
+            const currentToken = localStorage.getItem('token');
+            if (!currentToken) {
+                setUser(null);
+                setLoading(false);
+                return;
+            }
+
+            const res = await axios.get(`${API_URL}/auth/me`, {
+                headers: { Authorization: `Bearer ${currentToken}` }
+            });
             setUser(res.data);
             setError(null);
         } catch (err: any) {
             setUser(null);
-            // Don't set global error for checkAuth
+            localStorage.removeItem('token');
+            delete axios.defaults.headers.common['Authorization'];
         } finally {
             setLoading(false);
         }
@@ -63,7 +77,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setLoading(true);
             setError(null);
             const res = await axios.post(`${API_URL}/auth/login`, data);
-            setUser(res.data);
+            const { token, ...userData } = res.data;
+
+            if (token) {
+                localStorage.setItem('token', token);
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            }
+
+            setUser(userData);
         } catch (err: any) {
             setError(err.response?.data?.message || 'Login failed');
             throw err;
@@ -75,9 +96,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const logout = async () => {
         try {
             await axios.post(`${API_URL}/auth/logout`);
-            setUser(null);
         } catch (err) {
             console.error('Logout failed', err);
+        } finally {
+            localStorage.removeItem('token');
+            delete axios.defaults.headers.common['Authorization'];
+            setUser(null);
         }
     };
 

@@ -13,6 +13,7 @@ import ResultsPage from './pages/ResultsPage';
 import ChatPage from './pages/ChatPage';
 import DashboardHome from './pages/DashboardHome';
 import SettingsPage from './pages/SettingsPage';
+import AuthCallback from './pages/AuthCallback';
 import { Spinner } from './components/ui/Spinner';
 
 // --- Protected Route Wrapper ---
@@ -44,6 +45,7 @@ function AppRoutes() {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/signin" element={<SignInPage />} />
+                <Route path="/auth/callback" element={<AuthCallback />} />
             </Route>
 
             {/* Protected Dashboard Routes */}
