@@ -12,6 +12,11 @@ export const MainLayout = () => {
     const { t, isRTL, language, setLanguage } = useLanguage();
     const navigate = useNavigate();
 
+    const handleLogout = async () => {
+        await logout();
+        navigate('/');
+    };
+
     const navLinks = [
         { name: t('home'), href: '/' },
         { name: t('howItWorks'), href: '#how-it-works' },
@@ -68,7 +73,7 @@ export const MainLayout = () => {
                                 <Link to="/dashboard" className="text-sm font-black text-indigo-600 hover:text-indigo-700 transition-colors uppercase tracking-widest">
                                     {t('dashboard')}
                                 </Link>
-                                <Button variant="outline" className="text-xs px-6 py-2.5 border-slate-100 text-slate-500 hover:bg-slate-50 font-black rounded-xl" onClick={logout}>
+                                <Button variant="outline" className="text-xs px-6 py-2.5 border-slate-100 text-slate-500 hover:bg-slate-50 font-black rounded-xl" onClick={handleLogout}>
                                     {t('logout')}
                                 </Button>
                             </div>
@@ -118,7 +123,7 @@ export const MainLayout = () => {
                                             {t('dashboard')}
                                         </Button>
                                     </Link>
-                                    <Button variant="gold" className="w-full bg-indigo-600 text-white" onClick={() => { logout(); setIsMenuOpen(false); }}>
+                                    <Button variant="gold" className="w-full bg-indigo-600 text-white" onClick={async () => { await handleLogout(); setIsMenuOpen(false); }}>
                                         {t('logout')}
                                     </Button>
                                 </>

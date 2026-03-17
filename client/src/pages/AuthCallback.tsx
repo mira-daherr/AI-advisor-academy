@@ -22,8 +22,8 @@ const AuthCallback: React.FC = () => {
 
             // 3. Call checkAuth() to load user data
             checkAuth().then(() => {
-                // 4. Redirect to dashboard
-                navigate('/dashboard');
+                // 4. Redirect to home
+                navigate('/');
             }).catch((err) => {
                 console.error('Auth verification failed:', err);
                 navigate('/signin?error=auth_failed');

@@ -32,7 +32,7 @@ const SignInPage = () => {
         e.preventDefault();
         try {
             await login(formData);
-            navigate('/dashboard');
+            navigate('/');
         } catch (err) {
             // Error handled by context
         }
