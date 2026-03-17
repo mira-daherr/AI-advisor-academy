@@ -10,7 +10,7 @@ const userSchema = new Schema({
     plan: { type: String, enum: ['free', 'premium'], default: 'free' },
     profileCompleted: { type: Boolean, default: false },
     stripeCustomerId: { type: String },
-    isVerified: { type: Boolean, default: false },
+    isVerified: { type: Boolean, default: true },
     verificationToken: { type: String },
 }, { timestamps: true });
 

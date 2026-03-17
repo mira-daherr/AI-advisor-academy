@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { GraduationCap, AlertCircle, CheckCircle2, ArrowRight, ArrowLeft, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { GraduationCap, AlertCircle, ArrowRight, ArrowLeft, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -18,13 +18,6 @@ const SignInPage = () => {
     const [showPassword, setShowPassword] = useState(false);
     const { login, error: apiError, loading } = useAuth();
     const navigate = useNavigate();
-    const location = useLocation();
-
-    const queryParams = new URLSearchParams(location.search);
-    const verified = queryParams.get('verified') === 'true';
-    const successMessage = verified
-        ? (isRTL ? 'تم تأكيد بريدك الإلكتروني بنجاح! يمكنك الآن تسجيل الدخول.' : 'Email verified successfully! You can now sign in.')
-        : null;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -84,16 +77,6 @@ const SignInPage = () => {
                         <p className="text-slate-500">{t('loginSubtitle')}</p>
                     </div>
 
-                    {successMessage && (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className={`flex items-center gap-3 p-4 mb-6 rounded-2xl bg-green-50 text-green-600 text-sm font-bold border border-green-100 ${isRTL ? 'flex-row-reverse text-right' : ''}`}
-                        >
-                            <CheckCircle2 size={18} className="shrink-0" />
-                            <span>{successMessage}</span>
-                        </motion.div>
-                    )}
 
                     {/* Google Sign-In Button */}
                     <motion.button

@@ -1,8 +1,7 @@
 import { Router, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
 import User from '../models/User';
-import { sendWelcomeEmail, sendVerificationEmail } from '../services/emailService';
+import { sendWelcomeEmail } from '../services/emailService';
 
 const router = Router();
 
@@ -25,23 +24,28 @@ router.post('/register', async (req: Request, res: Response) => {
             return res.status(400).json({ message: 'User already exists' });
         }
 
-        // Create user
-        const verificationToken = crypto.randomBytes(32).toString('hex');
-        const user = await User.create({
+        // Create user — verified immediately, no email verification needed
+        const user: any = await User.create({
             name,
             email,
             password,
-            isVerified: false,
-            verificationToken,
+            isVerified: true,
         });
 
-        // Send verification email
-        sendVerificationEmail(user.email, user.name, verificationToken).catch(err =>
-            console.error('Failed to send verification email:', err)
+        // Send welcome email (non-blocking)
+        sendWelcomeEmail(user.email, user.name).catch(err =>
+            console.error('Failed to send welcome email:', err)
         );
 
+        const token = generateToken(user._id.toString());
+
         res.status(201).json({
-            message: 'Registration successful. Please check your email to verify your account.',
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            plan: user.plan,
+            profileCompleted: user.profileCompleted,
+            token,
         });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
@@ -57,10 +61,6 @@ router.post('/login', async (req: Request, res: Response) => {
         const user: any = await User.findOne({ email });
 
         if (user && (await user.comparePassword(password))) {
-            if (!user.isVerified) {
-                return res.status(403).json({ message: 'الرجاء التحقق من بريدك الإلكتروني أولاً' });
-            }
-
             const token = generateToken(user._id.toString());
 
             res.json({
@@ -80,39 +80,12 @@ router.post('/login', async (req: Request, res: Response) => {
 });
 
 // @route   GET /api/auth/verify-email
-// @desc    Verify user email
-router.get('/verify-email', async (req: Request, res: Response) => {
-    try {
-        const { token } = req.query;
-
-        if (!token) {
-            return res.status(400).json({ message: 'مطلوب رمز التحقق' });
-        }
-
-        const user = await User.findOne({ verificationToken: token });
-
-        if (!user) {
-            return res.status(400).json({ message: 'رمز التحقق غير صالح' });
-        }
-
-        user.isVerified = true;
-        user.verificationToken = undefined;
-        await user.save();
-
-        // Send welcome email after verification (non-blocking)
-        sendWelcomeEmail(user.email, user.name).catch(err =>
-            console.error('Failed to send welcome email:', err)
-        );
-
-        // Redirect to login page
-        const frontendUrl = process.env.NODE_ENV === 'production'
-            ? (process.env.FRONTEND_URL || 'https://astonishing-macaron-822c6b.netlify.app')
-            : (process.env.CLIENT_URL || 'http://localhost:5173');
-
-        res.redirect(`${frontendUrl}/signin?verified=true`);
-    } catch (error: any) {
-        res.status(500).json({ message: error.message });
-    }
+// @desc    Legacy — email verification is no longer required; redirect to sign-in
+router.get('/verify-email', (req: Request, res: Response) => {
+    const frontendUrl = process.env.NODE_ENV === 'production'
+        ? (process.env.FRONTEND_URL || 'https://astonishing-macaron-822c6b.netlify.app')
+        : (process.env.CLIENT_URL || 'http://localhost:5173');
+    res.redirect(`${frontendUrl}/signin`);
 });
 
 // @route   POST /api/auth/logout

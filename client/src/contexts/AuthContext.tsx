@@ -63,6 +63,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setLoading(true);
             setError(null);
             const res = await axios.post(`${API_URL}/auth/register`, data);
+            const { token, ...userData } = res.data;
+
+            if (token) {
+                localStorage.setItem('token', token);
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            }
+
+            setUser(userData);
             return res.data;
         } catch (err: any) {
             setError(err.response?.data?.message || 'Registration failed');
