@@ -22,7 +22,9 @@ const SignInPage = () => {
 
     const queryParams = new URLSearchParams(location.search);
     const verified = queryParams.get('verified') === 'true';
-    const successMessage = location.state?.successMessage || (verified ? (isRTL ? 'تم تأكيد بريدك الإلكتروني بنجاح! يمكنك الآن تسجيل الدخول.' : 'Email verified successfully! You can now sign in.') : null);
+    const successMessage = verified
+        ? (isRTL ? 'تم تأكيد بريدك الإلكتروني بنجاح! يمكنك الآن تسجيل الدخول.' : 'Email verified successfully! You can now sign in.')
+        : null;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
